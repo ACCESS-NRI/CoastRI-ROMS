@@ -10,12 +10,10 @@ spack:
     # the first element of the require is only a version
     roms:
       require:
-        - '@git.c1c5efd8276dfa67029363499ff7370b4582c47b'
-
+        - '@4.2'
     openmpi:
       require:
         - '@4.1.4'
-
     netcdf-c:
       require:
         - '@4.7.3'
