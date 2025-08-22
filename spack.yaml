@@ -8,7 +8,7 @@ spack:
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
-    roms:
+    ancoms-roms:
       require:
         - '@4.2'
     openmpi:
