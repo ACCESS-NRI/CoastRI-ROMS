@@ -4,7 +4,7 @@
 # configuration settings.
 spack:
   specs:
-    - coastri-roms@git.2025.06.000
+    - coastri-roms@git.2025.06.000 roms_application='upwelling'
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
