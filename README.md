@@ -59,7 +59,7 @@ Additionally the deployment creates environment modulefiles, the [standard metho
 
 ```bash
 module use /g/data/vk83/modules
-module avail access-om3
+module avail coastri-roms
 ```
 
 It is necessary to [join the vk83 project on gadi@NCI](https://my.nci.org.au/mancini/project/vk83) to access these deployments.
