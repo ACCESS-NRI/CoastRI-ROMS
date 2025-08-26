@@ -4,13 +4,14 @@
 # configuration settings.
 spack:
   specs:
-    - coastri-roms@git.2025.06.000 roms_application='upwelling'
+    - coastri-roms@git.2025.06.000
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
     ancoms-roms:
       require:
-        - '@4.2'
+        - '@4.2' 
+        - roms_application='upwelling'
     openmpi:
       require:
         - '@4.1.4'
