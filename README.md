@@ -1,91 +1,69 @@
-# model-deployment-template
+# CoastRI-ROMS
 
-A template repository for the deployment of `spack`-based models.
+## About the model
 
-> [!NOTE]
-> Feel free to replace this README with information on the model once the TODOs have been ticked off.
+ROMS solves the free-surface, hydrostatic, flux form of the primitive equations over variable bathymetry using stretched terrain following in the vertical and orthogonal curvilinear coordinates in the horizontal. The finite volume grid is discretized on a staggered Arakawa C-grid. Detailed information about its governing equations, numerical discretization, algorithms, usage, and tutorials is available in the WikiROMS documentation portal at www.myroms.org/wiki.
 
-## Things TODO to get your model deployed
+The [ROMS website](https://www.myroms.org) contains documentation of the model and is the canonical source of truth for the model.  The [ROMS code repository](https://github.com/myroms/roms) is the canonical source of truth for the model, and where issues regarding the model should be raised.
 
-### Settings
+All users of ROMS are encouraged to register and engage on the [ROMS Forum](https://www.myroms.org/forum/)
 
-#### Repository Settings
+## About this repository
 
-Branch protections should be set up on `main` and the special `backport/*.*` branches, which are used for backporting of fixes to major releases (the `YEAR.MONTH` portion of the `YEAR.MONTH.MINOR` version) of models.
+This is the Model Deployment Repository for the CoastRI deployment of the ROMS model. This repository contains a [spack environment](https://spack.readthedocs.io/en/latest/environments.html) manifest file ([`spack.yaml`](./spack.yaml)) that defines all the essential components of the model, including exact versions of the source code used.
 
-#### Repository Secrets/Variables
+## Support
 
-There are a few secrets and variables that must be set at the repository level.
+[ACCESS-NRI](https://www.access-nri.org.au) supports deployment of the ROMS model for the Australian Research Community as part of it's involvement in the [CoastRI Initiative](https://www.coastri.org.au).
 
-##### Repository Secrets
 
-* `GH_COMMIT_CHECK_TOKEN`: GitHub Token that allows workflows to run based on workflow-authored commits (in  the case where a user uses `!bump` commands in PRs that bumps the version of the model)
+[ACCESS-NRI](https://www.access-nri.org.au) **DOES NOT** support ROMS, or the running of ROMS on `gadi`.  Any questions about ACCESS-NRI releases of ROM should be done through the [ACCESS-Hive Forum](https://forum.access-hive.org.au/). See the [ACCESS Help and Support topic](https://forum.access-hive.org.au/t/access-help-and-support/908) for details on how to do this.
 
-##### Repository Variables
+Any questions about ROMS should be directed to the [ROMS Forum](https://www.myroms.org/forum/) or the [ANCOMS ROMS category](https://forum.access-hive.org.au/c/ancoms/roms/226) on the ACCESS-Hive Forum.
 
-* `BUILD_DB_PACKAGES`: List of `spack` packages that are model components that will be uploaded to the release provenance database
-* `NAME`: which corresponds to the model name - which is usually the repository name
-* `CONFIG_VERSIONS_SCHEMA_VERSION`: Version of the [`config/versions.json` schema](https://github.com/ACCESS-NRI/schema/tree/main/au.org.access-nri/model/deployment/config/versions) used in this repository
-* `SPACK_YAML_SCHEMA_VERSION`: Version of the [ACCESS-NRI-style `spack.yaml` schema](https://github.com/ACCESS-NRI/schema/tree/main/au.org.access-nri/model/spack/environment/deployment) used in this repository
-* `RELEASE_DEPLOYMENT_TARGETS`: Space-separated list of deployment targets when doing release deployments. These are often the names of [keys under the `deployment` key of `build-cd`s `config/settings.json`](https://github.com/ACCESS-NRI/build-cd/blob/09cdf100eefc58f06900e8e9145e77b4caf5a39d/config/settings.json#L3), such as `Gadi` or `Setonix`. As noted [below](#environment-secretsvariables), it is the same as the GitHub Environment name. For example: `Gadi Setonix`
-* `PRERELEASE_DEPLOYMENT_TARGETS`: Space-separated list of deployment targets when doing prerelease deployments, similar to the above. For example: `Gadi Setonix` - note the lack of a `Prerelease` specifier!
+### Build
 
-#### Environment Secrets/Variables
+ACCESS-NRI is using [spack](https://spack.io), a build from source package manager designed for use with high performance computing.
 
-GitHub Environments are sets of variables and secrets that are used specifically to deploy software, and hence have more security requirements for their use.
+Spack automatically builds all the components and their dependencies, producing model component executables. Spack already contains support for compiling thousands of common software packages. Spack packages for the components are defined in the [spack packages repository](https://github.com/ACCESS-NRI/spack_packages/).
 
-Currently, we have two Environments per deployment target - one for `Release` and one for `Prerelease`. Our current list of deployment targets and Environments can be found in this [deployment configuration file in `build-cd`](https://github.com/ACCESS-NRI/build-cd/blob/main/config/deployment-environment.json).
+CoastRI-ROMS is built and deployed automatically to `gadi` on NCI (see below). However it is possible to use spack to compile the model using the `spack.yaml` environment file in this repository. To do so follow the [instructions on for configuring spack on `gadi`](https://access-hive.org.au/getting_started/spack/).
 
-In order to deploy to a given deployment target:
+Then clone this repository and run the following commands on `gadi`:
+```bash
+spack env create coastri-roms spack.yaml
+spack env activate coastri-roms
+spack install
+```
+to create a spack environment called `coastri-roms` and build all the components, the locations of which can be found using `spack find --paths`.
 
-* Environments with the name of the deployment target and the type must be created _in this repository_ and have the associated secrets/variables set ([see below](#environment-secrets))
-* There must be a `Prerelease` Environment associated with the `Release` Environment. For example, if we are deploying to `SUPERCOMPUTER`, we require Environments with the names `SUPERCOMPUTER Release`, `SUPERCOMPUTER Prerelease`.
+### Source code
 
-When setting the environment up, remember to require sign off by a member of ACCESS-NRI when deploying as a `Release`.
+The ROMS source code used to build the model is contained in a fork on the ACCESS-Community-Hub organisation
 
-Regarding the secrets and variables that must be created:
+https://github.com/ACCESS-Community-Hub/roms
 
-##### Environment Secrets
+Contributions and engagement is welcome.
 
-* `HOST`: The deployment location SSH Host
-* `HOST_DATA`: The deployment location SSH Host for data transfer (may be the same as `HOST`)
-* `SSH_KEY`: A SSH Key that allows access to the above `HOST`/`HOST_DATA`
-* `USER`: A Username to login to the above `HOST`/`HOST_DATA`
-* (Required only for `Release` Environment) `TRACKING_SERVICES_POST_TOKEN`: A token used to post build information about the packages in `secrets.BUILD_DB_PACKAGES` to the release provenance database as part of tracking services. 
+### Deployment
 
-##### Environment Variables
+CoastRI-ROMS is deployed automatically when a new version of the [`spack.yaml`](./spack.yaml) file is committed to `main` or a dedicated `backport/VERSION` branch. All the CoastRI-ROMS components are built using `spack` on `gadi` and installed under the [`vk83`](https://my.nci.org.au/mancini/project/vk83) project in `/g/data/vk83`. It is necessary to be a member of [`vk83`](https://my.nci.org.au/mancini/project/vk83) project to use ACCESS-NRI deployments of CoastRI-ROMS
 
-* `DEPLOYED_MODULES_DIR`: Directory that will contain the modules created during the installation of the model. This can be virtual modules created by a [`.modulerc` file](https://github.com/ACCESS-NRI/build-cd/tree/main/tools/modules) in the directory.
-* `DEPLOYMENT_TARGET`: Name of the deployment target. It is exported to the deployment target and used for variations in `spack.yaml` build processes - seen most prominently in mutually-exclusive 'when' clauses like `spack.definitions[].when = env['DEPLOYMENT_TARGET'] == 'gadi'`. Also used for logging purposes.
-* `SPACK_INSTALLS_ROOT_LOCATION`: Path to the directory that contains all versions of a deployment of `spack`. For example, if `/some/apps/spack` is the `SPACK_INSTALLS_ROOT_LOCATION`, that directory will contain directories like `0.20`, `0.21`, `0.22`, which in turn contain an install of `spack`, `spack-packages` and `spack-config`
-* `SPACK_YAML_LOCATION`: Path to a directory that will contain the `spack.yaml` from this repository during deployment
-* (Optional) `SPACK_INSTALL_ADDITIONAL_ARGS`: Additional flags outside of `--fresh --fail-fast` to add to the `spack install` command. For advanced users who need to tailor the installation options in their repository.
-* (Required only for `Release` Environment) `TRACKING_SERVICES_POST_URL`: A url to the API of the release provenance database as part of tracking services. 
+The deployment process also creates a GitHub release with the same tag. All releases are available under the [Releases page](https://github.com/ACCESS-NRI/CoastRI-ROMS/releases). Each release has a changelog and meta-data with detailed information about the build and deployment, including:
 
-### File Modifications
+- paths on `gadi` to all executables built in the deployment process (`spack.location`)
+- a `spack.lock` file, which is a complete build provenance document, listing all the components that were built and their dependencies, versions, compiler version, build flags and build architecture. It is also installable via spack similarly to the `spack.yaml`. 
+- the environment `spack.yaml` file used for deployment
 
-#### In `.github/workflows`
+Additionally the deployment creates environment modulefiles, the [standard method for deploying software on `gadi`](https://opus.nci.org.au/display/Help/Environment+Modules). To view available CoastRI-ROMS versions:
 
-* Reminder that these workflows use `vars.NAME` (as well as inherit the above environment secrets) and hence these must be set.
-* If the name of the root SBD for the model (in [`spack-packages`](https://github.com/ACCESS-NRI/spack-packages/tree/main/packages)) is different from the model name (for example, `ACCESS-ESM1.5`s root SBD is `access-esm1p5`), you must uncomment and set the `jobs.[pr-ci|pr-comment|pr-closed].with.root-sbd` line to the appropriate SBD name.
+```bash
+module use /g/data/vk83/modules
+module avail coastri-roms
+```
 
-#### In `config/versions.json`
+It is necessary to [join the vk83 project on gadi@NCI](https://my.nci.org.au/mancini/project/vk83) to access these deployments.
 
-* `.spack` must be given a version. For example, it will clone the associated `releases/vVERSION` branch of `ACCESS-NRI/spack` if you give it `VERSION`.
-* `.spack-packages` should also have a CalVer-compliant tag as the version. See the [associated repo](https://github.com/ACCESS-NRI/spack-packages/tags) for a list of available tags.
+For users of CoastRI-ROMS model configurations supported by ANCOMS, knowledge of the exact location of the model executables is not required. Model configurations will be updated with new model components when necessary.
 
-#### In `spack.yaml`
-
-There are a few TODOs for the `spack.yaml`:
-
-* Only do this step if there are variations in compiler/etc across deployment targets:
-  * `spack.definitions`: Use the `ROOT_PACKAGE` to define the root SBD. The `ROOT_SPEC` simply combines the `ROOT_PACKAGE` with the other, mutually-exclusive `compiler_target` definition.
-  * `spack.specs`: Set the only element in the spec list to `$ROOT_SPEC` - it will be filled in at install time.
-
-Otherwise:
-
-* `spack.specs`: Set the root SBD as the only element of `spack.specs`. This must also have an `@git.YEAR.MONTH.MINOR` version as it is the version of the entire deployment (and indeed will be a tag in this repository).
-* `spack.packages.*`: In this section, you can specify the versions and variants of dependencies. Note that the first element of the `spack.packages.*.require` must be only a version. Variants and other configuration can be done on subsequent lines.
-* `spack.packages.all`: Can set configuration for all packages. For example, the compiler used, or the target architecture.
-* `spack.modules.default.tcl.include`: List of package names that will be explicitly included and available to `module load`.
-* `spack.modules.default.tcl.projections`: For included modules, you must set the name of the module to be the same as the `spack.packages.*.require[0]` version, without the `@git.`.
+For information on contributing your own fixes to the CoastRI-ROMS `spack.yaml`, see the [Hive Docs article](https://docs.access-hive.org.au/models/run-a-model/create-a-prerelease/) on creating a prerelease.

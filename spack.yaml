@@ -3,49 +3,27 @@
 # It describes a set of packages to be installed, along with
 # configuration settings.
 spack:
-  # TODO: This section is used primarily to provide variations to a model based on deployment target. Delete if not required.
-  # definitions:
-  # This is the root spack bundle that contains the model
-  # - ROOT_PACKAGE:
-  #   - MODEL@git.GIT_REF=SPACK_VERSION
-
-  # Mutually-exclusive Compiler and Target definitions (assumes DEPLOYMENT_TARGET set)
-  # - when: env['DEPLOYMENT_TARGET'] == 'Gadi'
-  #   compiler_target: ['%intel@19.0.5.281 target=x86_64_v4']
-  # More mutually-exclusive definitions can be made...
-  # Default
-  # - when: "'DEPLOYMENT_TARGET' not in env"
-  #   compiler_targets: ['intel@2021.2.0 target=x86_64']
-
-  # This is where the single definitions of ROOT_PACKAGE and compiler/target are
-  # matrixed together to form a single spec: MODEL@git.GIT_REF=SPACK_VERSION %intel@2021.2.0 target=x86_64
-  # - ROOT_SPEC:
-  #   - matrix:
-  #     - [$ROOT_PACKAGE]
-  #     - [$%compiler_target]
   specs:
-  # The root Spack Bundle Recipe (SBR) for the model and overall version of
-  # the deployment:
-  # TODO: Replace the MODEL, GIT_REF and SPACK_VERSION, if there is
-  #       only one deployment target
-  # - MODEL@git.GIT_REF=SPACK_VERSION
-  # Alternatively, if there are multiple deployment targets that require
-  # different compilers/variants, use the above definitions section and:
-  # - $ROOT_SPEC
+    - coastri-roms@git.2025.06.000
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
-    # the first element of the require is only a version:
-    # TODO: Specify versions and variants of dependencies as required.
-    # openmpi:
-    #   require:
-    #     - '@4.1.5'
+    # the first element of the require is only a version
+    ancoms-roms:
+      require:
+        - '@4.2' 
+        - roms_application='upwelling'
+    openmpi:
+      require:
+        - '@4.1.4'
+    netcdf-c:
+      require:
+        - '@4.7.3'
 
     # Specifications that apply to all packages
     all:
-    # TODO: Specify compiler/targets for all packages
-    # require:
-    #   - '%intel@2021.10.0'
-    #   - 'target=x86_64'
+      require:
+        - '%intel@2021.8.0'
+        - 'target=x86_64'
   view: true
   concretizer:
     unify: true
