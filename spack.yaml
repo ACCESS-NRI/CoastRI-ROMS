@@ -14,7 +14,7 @@ spack:
     # the first element of the require is only a version
     ancoms-roms:
       require:
-      - '@4.2' 
+      - '@4.2'
       - roms_application='upwelling'
     openmpi:
       require:
@@ -22,11 +22,14 @@ spack:
     netcdf-c:
       require:
       - '@4.7.3'
-
+    # Compilers
+    intel-oneapi-compilers:
+      require:
+      - '@2021.8.0'
     # Specifications that apply to all packages
     all:
       require:
-      - '%intel@2021.8.0'
+      - '%access_intel'
       - 'target=x86_64'
   view: true
   concretizer:
