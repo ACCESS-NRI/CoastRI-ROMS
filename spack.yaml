@@ -3,8 +3,12 @@
 # It describes a set of packages to be installed, along with
 # configuration settings.
 spack:
+  definitions:
+  # _name and _version are reserved definitions that inform build-cd deployments, and have no effect otherwise
+  - _name: [coastri-roms]
+  - _version: [2025.06.000]
   specs:
-  - coastri-roms@git.2025.06.000
+  - coastri-roms
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
