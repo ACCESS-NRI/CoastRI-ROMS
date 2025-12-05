@@ -4,26 +4,26 @@
 # configuration settings.
 spack:
   specs:
-    - coastri-roms@git.2025.06.000
+  - coastri-roms@git.2025.06.000
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
     ancoms-roms:
       require:
-        - '@4.2' 
-        - roms_application='upwelling'
+      - '@4.2' 
+      - roms_application='upwelling'
     openmpi:
       require:
-        - '@4.1.4'
+      - '@4.1.4'
     netcdf-c:
       require:
-        - '@4.7.3'
+      - '@4.7.3'
 
     # Specifications that apply to all packages
     all:
       require:
-        - '%intel@2021.8.0'
-        - 'target=x86_64'
+      - '%intel@2021.8.0'
+      - 'target=x86_64'
   view: true
   concretizer:
     unify: true
