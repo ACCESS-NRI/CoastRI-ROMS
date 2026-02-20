@@ -22,14 +22,21 @@ spack:
     netcdf-c:
       require:
       - '@4.7.3'
+
     # Compilers
-    intel-oneapi-compilers:
+    c:
       require:
-      - '@2021.8.0'
+      - intel-oneapi-compilers-classic@2021.8.0
+    cxx:
+      require:
+      - intel-oneapi-compilers-classic@2021.8.0
+    fortran:
+      require:
+      - intel-oneapi-compilers-classic@2021.8.0
+
     # Specifications that apply to all packages
     all:
-      require:
-      - '%access_intel'
+      prefer:
       - 'target=x86_64'
   view: true
   concretizer:
