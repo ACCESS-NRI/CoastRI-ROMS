@@ -15,6 +15,7 @@ spack:
     ancoms-roms:
       require:
       - '@4.2'
+      - '+mpi'
       - roms_application='upwelling'
     openmpi:
       require:
