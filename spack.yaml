@@ -6,7 +6,7 @@ spack:
   definitions:
   # _name and _version are reserved definitions that inform build-cd deployments, and have no effect otherwise
   - _name: [coastri-roms]
-  - _version: [2025.06.000]
+  - _version: [2026.02.000]
   specs:
   - coastri-roms
   packages:
@@ -26,13 +26,13 @@ spack:
     # Compilers
     c:
       require:
-      - intel-oneapi-compilers-classic@2021.8.0
+      - intel-oneapi-compilers-classic@2021.10.0
     cxx:
       require:
-      - intel-oneapi-compilers-classic@2021.8.0
+      - intel-oneapi-compilers-classic@2021.10.0
     fortran:
       require:
-      - intel-oneapi-compilers-classic@2021.8.0
+      - intel-oneapi-compilers-classic@2021.10.0
 
     # Specifications that apply to all packages
     all:
