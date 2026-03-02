@@ -3,27 +3,42 @@
 # It describes a set of packages to be installed, along with
 # configuration settings.
 spack:
+  definitions:
+  # _name and _version are reserved definitions that inform build-cd deployments, and have no effect otherwise
+  - _name: [coastri-roms]
+  - _version: [2026.02.000]
   specs:
-    - coastri-roms@git.2025.06.000
+  - coastri-roms
   packages:
     # Specification of dependency versions and variants. CI/CD requires that
     # the first element of the require is only a version
     ancoms-roms:
       require:
-        - '@4.2' 
-        - roms_application='upwelling'
+      - '@4.2'
+      - '+mpi'
+      - roms_application='upwelling'
     openmpi:
       require:
-        - '@4.1.4'
+      - '@4.1.5'
     netcdf-c:
       require:
-        - '@4.7.3'
+      - '@4.7.3'
+
+    # Compilers
+    c:
+      require:
+      - intel-oneapi-compilers-classic@2021.10.0
+    cxx:
+      require:
+      - intel-oneapi-compilers-classic@2021.10.0
+    fortran:
+      require:
+      - intel-oneapi-compilers-classic@2021.10.0
 
     # Specifications that apply to all packages
     all:
-      require:
-        - '%intel@2021.8.0'
-        - 'target=x86_64'
+      prefer:
+      - 'target=x86_64'
   view: true
   concretizer:
     unify: true
