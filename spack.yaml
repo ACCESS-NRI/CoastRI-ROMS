@@ -8,10 +8,10 @@ spack:
   - _name: [coastri-roms]
   - _version: [2026.03.000]
   # _spack-version and _custom-scopes inform the branch of spack to use, and custom scopes if applicable, respectively
-  - _spack-version: ["1.1"]
+  - _spack-version: ['1.1']
   # Release database provenance information - packages for inclusion into the database, and packages just for injection into the modules
-  - _provenance: ["ancoms-roms"]
-  - _injection: ["openmpi"]
+  - _provenance: [ancoms-roms]
+  - _injection: [openmpi]
   specs:
   - coastri-roms
   packages:
@@ -20,7 +20,7 @@ spack:
     ancoms-roms:
       require:
       - '@4.2'
-      - '+mpi'
+      - +mpi
       - roms_application='upwelling'
     openmpi:
       require:
@@ -43,7 +43,7 @@ spack:
     # Specifications that apply to all packages
     all:
       prefer:
-      - 'target=x86_64'
+      - target=x86_64
   view: true
   concretizer:
     unify: true
